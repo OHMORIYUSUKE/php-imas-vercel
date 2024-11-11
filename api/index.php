@@ -1,11 +1,11 @@
 <?php
 
-$host = $_ENV['PG_HOST'];
-$port = $_ENV['PG_PORT'];
-$db = $_ENV['PG_DB'];
-$user = $_ENV['PG_USER'];
-$password = $_ENV['PG_PASSWORD'];
-$endpoint = $_ENV['PG_ENDPOINT'];
+$host = $_ENV['POSTGRES_HOST'];
+$port = $_ENV['POSTGRES_PORT'];
+$db = $_ENV['POSTGRES_DATABASE'];
+$user = $_ENV['POSTGRES_USER'];
+$password = $_ENV['POSTGRES_PASSWORD'];
+$endpoint = $_ENV['POSTGRES_ENDPOINT'];
 
 $connection_string = "host=" . $host . " port=" . $port . " dbname=" . $db . " user=" . $user . " password=" . $password . " options='endpoint=" . $endpoint . "' sslmode=require";
 
