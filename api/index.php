@@ -19,10 +19,10 @@ try {
 }
 
 // Parameters for search
-$ch_name = $_GET['ch-name'];
-$cv_name = $_GET['cv-name'];
-$ch_blood_type = $_GET['ch-blood-type'];
-$type = $_GET['group'];
+$ch_name = $_GET['ch-name'] ?? "";
+$cv_name = $_GET['cv-name'] ?? "";
+$ch_blood_type = $_GET['ch-blood-type'] ?? "";
+$type = $_GET['group'] ?? "";
 
 function escape_html($text) {
     return htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
