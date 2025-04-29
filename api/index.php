@@ -1,7 +1,18 @@
 <?php
+// 環境変数の読み込み
+$envFile = __DIR__ . '/../.env';
+if (file_exists($envFile)) {
+    $lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    foreach ($lines as $line) {
+        if (strpos(trim($line), '#') === 0) continue;
+        list($name, $value) = explode('=', $line, 2);
+        $_ENV[trim($name)] = trim($value);
+    }
+}
+
 // Database connection setup
 $host = $_ENV['POSTGRES_HOST'];
-$port = $_ENV['POSTGRES_PORT'];
+$port = $_ENV['POSTGRES_PORT'] ?? '5432';
 $dbname = $_ENV['POSTGRES_DATABASE'];
 $user = $_ENV['POSTGRES_USER'];
 $password = $_ENV['POSTGRES_PASSWORD'];
@@ -43,51 +54,11 @@ echo "<body>";
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>アイドル名簿</title>
-    <link rel="stylesheet" href="style/main.css">
     <style>
-        /* コンテナを横並びにする */
-        .result-item {
-            display: flex;            /* 横並び */
-            border-bottom: 1px solid #ddd;
-            padding: 10px 0;
-            margin-bottom: 10px;      /* アイテム間のスペース */
-        }
-
-        .result-item img {
-            width: 100px;             /* 画像のサイズ調整 */
-            height: 100px;
-            margin-left: 20px;
-            margin-right: 20px;       /* 画像とテキスト間のスペース */
-        }
-
-        p {
-            margin: 5px;
-            padding: 0;
-        }
-
-        .result-item .character {
-            display: flex;
-            flex-direction: column;   /* テキストを縦に並べる */
-        }
-
-        /* その他のスタイル */
-        .blocktext {
-            margin-left: auto;
-            margin-right: auto;
-            max-width: 60%;
-            min-width: 20%;
-            overflow-wrap: break-word;
-            border: rgb(0, 0, 0) 1px solid;
-        }
-
-        .container {
-            display: flex;
-        }
-
-        /* フォームのスタイル */
-        .search-form {
-            margin-bottom: 20px;
-        }
+        <?php
+        $css = file_get_contents(__DIR__ . '/style.css');
+        echo $css;
+        ?>
     </style>
 </head>
 <body>
@@ -176,11 +147,6 @@ if ($stmt->rowCount() == 0) {
 } else {
     foreach ($stmt as $row) {
         echo "<div class='result-item'>";
-        
-        // 画像がある場合に表示
-        if (!empty($row['image'])) {
-            echo "<img src='" . escape_html($row['image']) . "' alt='" . escape_html($row['ch_name']) . "' />";
-        }
 
         echo "<div class='character'>";
         echo "<p><b>" . escape_html($row['id']) . "</b>　" . escape_html($row['type']) . "</p>";
@@ -198,7 +164,6 @@ if ($stmt->rowCount() == 0) {
 
         echo "</div>"; // character div
         echo "</div>"; // result-item div
-        echo "<hr>";
     }
 }
 ?>
